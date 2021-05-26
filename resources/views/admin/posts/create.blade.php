@@ -4,6 +4,8 @@
     Crea un nuovo post
 @endsection
 
+@section('content')
+
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -14,7 +16,7 @@
     </div>
 @endif
 
-@section('content')
+
 <form action="{{route('admin.posts.store')}}" method="POST">
   @method('POST')
   @csrf
