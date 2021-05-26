@@ -1,8 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+// qui devo aggiungere io Admin xk in web.php ho definito: ->namespace('Admin')
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+
+// Da includere a mano
+use App\Post;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
@@ -13,7 +18,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+
+        $posts = Post::all();
+
+        dd($posts);
+
+        return view('welcome');
     }
 
     /**
@@ -23,7 +33,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -43,7 +53,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
         //
     }
