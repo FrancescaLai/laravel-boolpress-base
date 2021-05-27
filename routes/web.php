@@ -13,8 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'BlogController@index');
+// Guest Routes
+Route::get('/', 'BlogController@index')->name('guest.posts.index');
 
+Route::get('posts/{slug}', 'BlogController@show')->name('guest.posts.show');
+
+
+// Admin (ALL) Routes
 Route::prefix('admin')->name('admin.')->namespace('Admin')->group(function(){
     Route::resource('posts', 'PostController');
 });
