@@ -6,7 +6,7 @@
 
 @section('content')
 <div>
-    <a href="{{route('admin.posts.create')}}"><button type="button" class="btn btn-success">Aggiungi Post</button></a>
+    <a href="{{route('admin.posts.create')}}"><button type="button" class="btn btn-success"><i class="fas fa-plus"></i>Aggiungi Post</button></a>
 </div>
         <table class="table table-striped">
             <thead class="thead-dark">
@@ -24,14 +24,14 @@
                 <td><img src="{{$post->image ? $post->image : 'https://via.placeholder.com/200' }}" alt="{{$post->title}}" style="width: 100px"></td>
                 <td>{{$post->title}}</td>
                 <td>{{$post->date}}</td>
-                <td>{{$post->published}}</td>
+                <td>{!! $post->published ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>' !!}</td>
                 <td>
-                    <a href="{{route('admin.posts.show', [ 'post' => $post->id ])}}"><button type="button" class="btn btn-outline-info"><i class="far fa-eye"></i></button></a>
-                    <a href="{{route('admin.posts.edit', [ 'post' => $post->id ])}}"><button type="button" class="btn btn-outline-dark"><i class="fas fa-pen"></i></button></a>
+                    <a href="{{route('admin.posts.show', [ 'post' => $post->id ])}}"><button type="button" class="btn btn-outline-info"><i class="fas fa-search"></i></button></a>
+                    <a href="{{route('admin.posts.edit', [ 'post' => $post->id ])}}"><button type="button" class="btn btn-outline-success"><i class="fas fa-pen"></i></button></a>
                     <form action="{{route('admin.posts.destroy', ['post' => $post->id ])}}" method="POST">
                         @method('DELETE')
                         @csrf
-                        <button type="submit" class="btn btn-outline-danger">Elimina</button>
+                        <button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
                     </form>
                 </td>
             </tr>

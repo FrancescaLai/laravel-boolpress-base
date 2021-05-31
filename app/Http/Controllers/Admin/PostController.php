@@ -12,6 +12,14 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    // VALIDAZIONE sulla base di quanto indicato nel file delle Migrations (create_posts_table) 
+    protected $validation = [
+        'title' => 'required|string|max:255|unique:posts',
+        'date' => 'required|date|',
+        'content' => 'required|string',
+        'image' => 'nullable|url',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -43,37 +51,18 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // Validazione (ripresa da quanto definito sopra)
+        $request->validate($this->validation);
+
         $data = $request->all();
 
-        //validazione a parte x la checkbox
-        if ( !isset($data['published'])) {
-            $data['published'] = false;
-        } else {
-            $data['published'] = true;
-        }
-        //validazione da fare sulla base di quanto indicato nel file delle Migrations (create_posts_table) 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'date' => 'required|date|',
-            'content' => 'required|string',
-            'image' => 'nullable|url',
-        ]);
+        // controllo x la checkbox
+        $data['published'] = !isset($data['published']) ? 0 : 1;
 
-        // imposto lo slug sul title (se scrivo questo posso commentare tutto l'insert e aggiungere solo: *)
+        // imposto lo slug sul titolo
         $data['slug'] = Str::slug($data['title'], '-');
 
         //Insert
-        // $newPost = new Post();
-        // $newPost->title = $data['title'];
-        // $newPost->date = $data['date']; 
-        // $newPost->content = $data['content'];
-        // $newPost->image = $data['image'];
-        // $newPost->slug = Str::slug($data['title'], '-');
-        // $newPost->published = $data['published'];
-        // $newPost->save();
-
-
-        // * parte da aggiungere, collegata alla riga sopra 
         Post::create($data);
 
         //Redirect
@@ -89,7 +78,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view('admin.posts.show', compact('post'));
     }
 
     /**
@@ -98,9 +87,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -110,9 +99,24 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        // Validazione (ripresa da quanto definito sopra)
+        $request->validate($this->validation);
+
+        $data = $request->all();
+
+        // controllo x la checkbox
+        $data['published'] = !isset($data['published']) ? 0 : 1;
+
+        // imposto lo slug sul titolo
+        $data['slug'] = Str::slug($data['title'], '-');
+
+        //update
+        $post->update($data);
+
+        //return
+        return redirect()->route('admin.posts.show', $post);
     }
 
     /**
