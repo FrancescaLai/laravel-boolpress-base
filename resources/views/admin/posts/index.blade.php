@@ -26,8 +26,8 @@
                 <td>{{$post->date}}</td>
                 <td>{{$post->published}}</td>
                 <td>
-                    <a href="{{route('admin.posts.show', [ 'post' => $post->id ])}}"><button type="button" class="btn btn-outline-info">Visualizza</button></a>
-                    <a href="{{route('admin.posts.edit', [ 'post' => $post->id ])}}"><button type="button" class="btn btn-outline-dark">Modifica</button></a>
+                    <a href="{{route('admin.posts.show', [ 'post' => $post->id ])}}"><button type="button" class="btn btn-outline-info"><i class="far fa-eye"></i></button></a>
+                    <a href="{{route('admin.posts.edit', [ 'post' => $post->id ])}}"><button type="button" class="btn btn-outline-dark"><i class="fas fa-pen"></i></button></a>
                     <form action="{{route('admin.posts.destroy', ['post' => $post->id ])}}" method="POST">
                         @method('DELETE')
                         @csrf
@@ -39,8 +39,11 @@
             </tbody>	
         </table>
         @if (session('message'))
-            <div class="alert alert-success">
+            <div class="alert alert-success" style="position: fixed; bottom: 30px; right: 30px">
                 {{ session('message')}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
             </div>
         @endif	
 	</body>
