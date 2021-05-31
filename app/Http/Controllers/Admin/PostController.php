@@ -21,6 +21,8 @@ class PostController extends Controller
     {
 
         $posts = Post::all();
+
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -57,7 +59,7 @@ class PostController extends Controller
             'image' => 'nullable|url',
         ]);
 
-        // imposto lo slug sul title
+        // imposto lo slug sul title (se scrivo questo posso commentare tutto l'insert e aggiungere solo: *)
         $data['slug'] = Str::slug($data['title'], '-');
 
         //Insert
@@ -70,6 +72,8 @@ class PostController extends Controller
         // $newPost->published = $data['published'];
         // $newPost->save();
 
+
+        // * parte da aggiungere, collegata alla riga sopra 
         Post::create($data);
 
         //Redirect
@@ -117,8 +121,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect()->route('admin.posts.index')->with('message', 'il post è stato cancellato');
     }
 }

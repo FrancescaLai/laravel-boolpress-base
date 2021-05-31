@@ -26,7 +26,7 @@ class BlogController extends Controller
             abort(404);
         }
 
-        // Restituisco la pagina del singolo post
+        // Altrimenti (se trovo la pagina) restituisco la pagina del singolo post
         return view('guest.show', compact('post'));
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.guest')
 
 @section('pageTitle')
-    Prova
+   Boolpress
 @endsection
 
 @section('content')

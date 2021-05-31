@@ -15,7 +15,7 @@
         <ul>
             @forelse ($post->comments as $comment)
                 <li>
-                    <h5>{{$comment->name}}</h5>
+                    <h5>{{$comment->name ? $comment->name : 'Anonimo'}}</h5>
                     <p>{{$comment->content}}</p>
                 </li>
             @empty
