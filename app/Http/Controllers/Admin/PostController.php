@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 // Da includere a mano
 use App\Post;
+use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 
@@ -40,7 +41,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        // Creo/prendo i tag
+        $tags = Tag::all();
+
+        return view('admin.posts.create', compact('tags'));
     }
 
     /**
@@ -52,7 +56,8 @@ class PostController extends Controller
     public function store(Request $request)
     {
         // Validazione (ripresa da quanto definito sopra)
-        $request->validate($this->validation);
+        $validation = $this->validation;
+        $request->validate($validation);
 
         $data = $request->all();
 
@@ -63,7 +68,13 @@ class PostController extends Controller
         $data['slug'] = Str::slug($data['title'], '-');
 
         //Insert
-        Post::create($data);
+        $newPost = Post::create($data);
+
+        // Se aggiungo dei tag, alla creazione del post associo i tag selezionati e creati sopra 
+        if( isset($data['tags'])){
+            $newPost->tags()->attach($data['tags']);
+        }
+        
 
         //Redirect
         return redirect()->route('admin.posts.index');
@@ -89,7 +100,10 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+
+        $tags = Tag::all();
+
+        return view('admin.posts.edit', compact('post', 'tags'));
     }
 
     /**
@@ -101,8 +115,10 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        // Validazione (ripresa da quanto definito sopra)
-        $request->validate($this->validation);
+        // Validazione + esclusione dell'id sul title
+        $validation = $this->validation;
+        $validation['title'] = $validation['title'] . ',title,' . $post->id;
+        $request->validate($validation);
 
         $data = $request->all();
 
@@ -114,6 +130,13 @@ class PostController extends Controller
 
         //update
         $post->update($data);
+
+        // prima controllo che funzioni anche se non c'è alcun tag selezionato
+        if( !isset($data['tags']) ){
+            $data['tags'] = [];
+        }
+        // in caso invece selezioni dei tag, li aggiorno e salvo (x aggiornare uso SYNC che fa attach + detach in automatico)
+        $post->tags()->sync($data['tags']);
 
         //return
         return redirect()->route('admin.posts.show', $post);
@@ -127,6 +150,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        // x eliminare i post
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('message', 'il post è stato cancellato');
