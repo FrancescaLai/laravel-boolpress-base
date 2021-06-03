@@ -11,6 +11,7 @@
     <p>{{$post->content}}</p>
 
     <div class="mt-3">
+        @if($post->comments->isNotEmpty())
         <h3>Commenti</h3>
         <ul>
             @forelse ($post->comments as $comment)
@@ -22,7 +23,24 @@
                 <p>Non ci sono commenti</p>  
             @endforelse
         </ul>
-    </div>
-    
+        @endif
+        <h3>Aggiungi commento</h3>
+        <form action="{{route('guest.posts.add-comment', ['post' => $post->id])}}" method="post">
+            @method('POST')
+            @csrf
+        
+            <div class="form-group">
+                <label for="title">Nome</label>
+                <input class="form-control" type="text" name="name" id="name" placeholder="inserisci nome">
+            </div>
+            <div class="form-group">
+                <label for="content">Commento</label>
+                <textarea class="form-control" name="content" id="content" cols="30" rows="4" placeholder="inserisci il tuo commento"></textarea>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Inserisci</button>
+            </div>
+        </form>
+    </div>   
 </div>
 @endsection

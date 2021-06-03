@@ -135,7 +135,7 @@ class PostController extends Controller
         if( !isset($data['tags']) ){
             $data['tags'] = [];
         }
-        // in caso invece selezioni dei tag, li aggiorno e salvo (x aggiornare uso SYNC che fa attach + detach in automatico)
+        // in caso invece ci siano tag selezionati, li aggiorno e salvo (x aggiornare uso SYNC che fa attach + detach in automatico)
         $post->tags()->sync($data['tags']);
 
         //return
