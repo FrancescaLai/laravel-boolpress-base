@@ -28,7 +28,7 @@
         <form action="{{route('guest.posts.add-comment', ['post' => $post->id])}}" method="post">
             @method('POST')
             @csrf
-        
+            
             <div class="form-group">
                 <label for="title">Nome</label>
                 <input class="form-control" type="text" name="name" id="name" placeholder="inserisci nome">
