@@ -14,13 +14,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Guest Routes
+// rotta pagina index
 Route::get('/', 'BlogController@index')->name('guest.posts.index');
+// rotta pagina singolo post 
 Route::get('posts/{slug}', 'BlogController@show')->name('guest.posts.show');
+// rotta pagina x aggiungere i commenti
 Route::post('posts/{post}/add-comment', 'BlogController@addComment')->name('guest.posts.add-comment');
+// rotta pagina x vedere i post associati al singolo tag....
+Route::get('tags/{slug}', 'BlogController@filterTag')->name('guest.posts.filter-tag');
 
 
 // Admin (ALL) Routes
 Route::prefix('admin')->name('admin.')->namespace('Admin')->group(function(){
     Route::resource('posts', 'PostController');
+    Route::delete('comments/{comment}', 'CommentController@destroy')->name('comments.destroy');
 });
 

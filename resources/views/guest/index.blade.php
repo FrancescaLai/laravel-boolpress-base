@@ -61,8 +61,7 @@
                 </div>
             </div>
             @endforeach
-
-
+            
         </div>
 
         <aside class="col-md-4 blog-sidebar">
