@@ -31,7 +31,7 @@ class BlogController extends Controller
             abort(404);
         }
 
-        // Altrimenti (se trovo la pagina) restituisco la pagina del singolo post
+        // Altrimenti restituisco la pagina del singolo post
         return view('guest.show', compact('post', 'tags'));
     }
 
@@ -55,9 +55,16 @@ class BlogController extends Controller
 
     public function filterTag($slug)
     {
-        $tag = Tag::where('slug', $slug)->first();
         $tags = Tag::all();
-        $posts = $tag->posts;
+
+        $tag = Tag::where('slug', $slug)->first();
+
+        // Se il tag non esiste proprio (dovrei scriverlo a mano nella url)
+        if ( $tag == null) {
+            abort(404);
+        }
+        // belongsToMany -> prendo tutti i post associati a un tag
+        $posts = $tag->posts()->where('published', 1)->get();
 
         // Restituisco la pagina index/home
         return view('guest.index', compact('posts', 'tags'));
